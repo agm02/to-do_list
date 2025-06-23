@@ -1,0 +1,42 @@
+.red-light {
+    background-color: var(--red100);
+    color: var(--red700);
+}
+
+.success {
+    background-color: var(--success);
+    color: var(--white);
+}
+
+.white-button {
+    background-color: var(--white);
+    border-style: solid; 
+    border-width: 1px; 
+    border-radius: 4px;
+    border-color: var(--gray700);
+    color: var(--black)
+}
+
+.white-button[disabled] {
+    border-color: var(--gray200);
+    color: var(--gray500)
+}
+
+.white-select {
+    background-color: var(--white);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: var(--gray200);
+    color: var(--gray700);
+    line-height: 16px;
+}
+
+.primary {
+    background-color: var(--primary);
+    color: var(--white)
+}
+
+.white-text {
+    color: var(--white) !important;
+}
