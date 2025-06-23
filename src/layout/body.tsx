@@ -38,7 +38,7 @@ export default function Body() {
   }
 
   function removeTask(taskId: number) {
-    const numTasks = tasks.length - 1;
+    const numTasks = tasks.length - 1 === 0 ? 1 : tasks.length - 1;
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     setMaxPage(Math.ceil(numTasks / itemsPerPage));
     if (currPage === maxPage) {
@@ -56,7 +56,11 @@ export default function Body() {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === taskId
-          ? { ...task, conclusionDate: new Date(), checked: !task.checked }
+          ? {
+              ...task,
+              conclusionDate: !task.checked ? new Date() : undefined,
+              checked: !task.checked,
+            }
           : task
       )
     );
