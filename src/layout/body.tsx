@@ -1,58 +1,58 @@
-import { useState } from "react";
-import Button from "../components/button";
-import Separator from "../components/separator";
-import Pagination from "../components/pagination";
-import { Colors, ITask } from "../utils/interfaces";
-import Table from "../components/table";
+import { useState } from "react"
+import Button from "../components/button"
+import Separator from "../components/separator"
+import Pagination from "../components/pagination"
+import { Colors, ITask } from "../utils/interfaces"
+import Table from "../components/table"
 
 export default function Body() {
-  const [currPage, setCurrPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(1);
-  const [tasks, setTasks] = useState<ITask[]>([]);
-  const [inputTask, setInputTask] = useState<string>("");
+  const [currPage, setCurrPage] = useState(1)
+  const [maxPage, setMaxPage] = useState(1)
+  const [tasks, setTasks] = useState<ITask[]>([])
+  const [inputTask, setInputTask] = useState<string>("")
 
-  const [showToast, setShowToast] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
-  const [toastTimeoutId, setToastTimeoutId] = useState<NodeJS.Timeout>();
+  const [showToast, setShowToast] = useState(false)
+  const [toastMsg, setToastMsg] = useState("")
+  const [toastTimeoutId, setToastTimeoutId] = useState<NodeJS.Timeout>()
 
-  const allItemsPerPage = [8, 16, 24];
-  const [itemsPerPage, setItemsPerPage] = useState(allItemsPerPage[0]);
+  const allItemsPerPage = [8, 16, 24]
+  const [itemsPerPage, setItemsPerPage] = useState(allItemsPerPage[0])
 
   function addTask() {
-    const numTasks = tasks.length + 1;
-    const lastArticleId = tasks.length === 0 ? 0 : tasks[tasks.length - 1].id;
+    const numTasks = tasks.length + 1
+    const lastArticleId = tasks.length === 0 ? 0 : tasks[tasks.length - 1].id
     const newTask: ITask = {
       id: lastArticleId + 1,
       title: inputTask,
       creationDate: new Date(),
       checked: false,
-    };
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    setMaxPage(Math.ceil(numTasks / itemsPerPage));
-    setInputTask("");
+    }
+    setTasks((prevTasks) => [...prevTasks, newTask])
+    setMaxPage(Math.ceil(numTasks / itemsPerPage))
+    setInputTask("")
 
-    clearTimeout(toastTimeoutId);
-    setShowToast(true);
-    setToastMsg("Tarefa adicionada");
-    setToastTimeoutId(setTimeout(() => setShowToast(false), 2000));
+    clearTimeout(toastTimeoutId)
+    setShowToast(true)
+    setToastMsg("Tarefa adicionada")
+    setToastTimeoutId(setTimeout(() => setShowToast(false), 2000))
   }
 
   function removeTask(taskId: number) {
-    const numTasks = tasks.length - 1 === 0 ? 1 : tasks.length - 1;
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    setMaxPage(Math.ceil(numTasks / itemsPerPage));
+    const numTasks = tasks.length - 1 === 0 ? 1 : tasks.length - 1
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
+    setMaxPage(Math.ceil(numTasks / itemsPerPage))
     if (currPage === maxPage) {
-      setCurrPage(Math.ceil(numTasks / itemsPerPage));
+      setCurrPage(Math.ceil(numTasks / itemsPerPage))
     }
 
-    clearTimeout(toastTimeoutId);
-    setShowToast(true);
-    setToastMsg("Tarefa excluída");
-    setToastTimeoutId(setTimeout(() => setShowToast(false), 2000));
+    clearTimeout(toastTimeoutId)
+    setShowToast(true)
+    setToastMsg("Tarefa excluída")
+    setToastTimeoutId(setTimeout(() => setShowToast(false), 2000))
   }
 
   function checkTask(taskId: number) {
-    const checkedTask = tasks.filter((task) => task.id === taskId);
+    const checkedTask = tasks.filter((task) => task.id === taskId)
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === taskId
@@ -63,43 +63,43 @@ export default function Body() {
             }
           : task
       )
-    );
+    )
 
     if (checkedTask.length !== 0 && !checkedTask[0].checked) {
-      clearTimeout(toastTimeoutId);
-      setShowToast(true);
-      setToastMsg("Tarefa concluída");
-      setToastTimeoutId(setTimeout(() => setShowToast(false), 2000));
+      clearTimeout(toastTimeoutId)
+      setShowToast(true)
+      setToastMsg("Tarefa concluída")
+      setToastTimeoutId(setTimeout(() => setShowToast(false), 2000))
     }
   }
 
   function handleNumVisiblePages(e: React.ChangeEvent<HTMLSelectElement>) {
-    const numTasks = tasks.length === 0 ? 1 : tasks.length;
-    const newItemsPerPage = +e.target.value;
+    const numTasks = tasks.length === 0 ? 1 : tasks.length
+    const newItemsPerPage = +e.target.value
 
     if (currPage === maxPage) {
-      setCurrPage(Math.ceil(numTasks / newItemsPerPage));
+      setCurrPage(Math.ceil(numTasks / newItemsPerPage))
     } else {
-      const firstItemIndex = (currPage - 1) * itemsPerPage;
-      const newCurrPage = Math.round(firstItemIndex / newItemsPerPage);
-      setCurrPage(newCurrPage === 0 ? 1 : newCurrPage);
+      const firstItemIndex = (currPage - 1) * itemsPerPage
+      const newCurrPage = Math.round(firstItemIndex / newItemsPerPage)
+      setCurrPage(newCurrPage === 0 ? 1 : newCurrPage)
     }
-    setItemsPerPage(newItemsPerPage);
-    setMaxPage(Math.ceil(numTasks / newItemsPerPage));
+    setItemsPerPage(newItemsPerPage)
+    setMaxPage(Math.ceil(numTasks / newItemsPerPage))
   }
 
   function renderTasks() {
-    const firstIndex = (currPage - 1) * itemsPerPage;
-    const lastIndex = firstIndex + itemsPerPage;
-    return tasks.slice(firstIndex, lastIndex);
+    const firstIndex = (currPage - 1) * itemsPerPage
+    const lastIndex = firstIndex + itemsPerPage
+    return tasks.slice(firstIndex, lastIndex)
   }
 
   function handlePrevPage() {
-    setCurrPage((prevPage) => prevPage - 1);
+    setCurrPage((prevPage) => prevPage - 1)
   }
 
   function handleNextPage() {
-    setCurrPage((prevPage) => prevPage + 1);
+    setCurrPage((prevPage) => prevPage + 1)
   }
 
   return (
@@ -170,13 +170,13 @@ export default function Body() {
               className="btn-close btn-close-white"
               aria-label="Close"
               onClick={() => {
-                setShowToast(false);
-                clearTimeout(toastTimeoutId);
+                setShowToast(false)
+                clearTimeout(toastTimeoutId)
               }}
             ></button>
           </div>
         </div>
       )}
     </main>
-  );
+  )
 }
