@@ -20,7 +20,8 @@ export default function Body() {
 
     function addTask() {
         const numTasks = tasks.length + 1
-        const newTask: ITask = { id: tasks[tasks.length - 1].id + 1, title: inputTask, creationDate: new Date(), checked: false }
+        const lastArticleId = tasks.length === 0 ? 0 : tasks[tasks.length - 1].id
+        const newTask: ITask = { id: lastArticleId + 1, title: inputTask, creationDate: new Date(), checked: false }
         setTasks(prevTasks => [...prevTasks, newTask])
         setMaxPage(Math.ceil(numTasks / itemsPerPage))
         setInputTask('')
@@ -58,7 +59,7 @@ export default function Body() {
     }
 
     function handleNumVisiblePages(e: React.ChangeEvent<HTMLSelectElement>) {
-        const numTasks = tasks.length
+        const numTasks = tasks.length === 0 ? 1 : tasks.length
         const newItemsPerPage = +e.target.value
         
         if (currPage === maxPage) {
